@@ -61,6 +61,14 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             popd
         ;;
         'linux')
+            PREFIX="$STAGING_DIR"
+            CC="gcc-4.1" ./configure --prefix=$PREFIX
+            make
+            make install
+            
+            mv "$PREFIX/lib" "$PREFIX/release"
+            mkdir -p "$PREFIX/lib/"
+            cp -R "$PREFIX/release" "$PREFIX/lib/"
         ;;
     esac
 
