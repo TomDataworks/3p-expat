@@ -68,7 +68,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             
             mv "$PREFIX/lib" "$PREFIX/release"
             mkdir -p "$PREFIX/lib/"
-            cp -R "$PREFIX/release" "$PREFIX/lib/"
+            mv "$PREFIX/release" "$PREFIX/lib/"
         ;;
     esac
 
