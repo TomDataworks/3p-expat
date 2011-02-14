@@ -34,6 +34,10 @@
               <string>Release</string>
             </map>
           </map>
+          <key>manifest</key>
+          <array>
+            <string>include/*.h</string>
+          </array>
           <key>name</key>
           <string>common</string>
         </map>
@@ -41,6 +45,16 @@
         <map>
           <key>configurations</key>
           <map>
+            <key>Release</key>
+            <map>
+              <key>build</key>
+              <map>
+              </map>
+              <key>default</key>
+              <string>true</string>
+              <key>name</key>
+              <string>Release</string>
+            </map>
             <key>default</key>
             <map>
               <key>build</key>
@@ -50,6 +64,11 @@
               <string>default</string>
             </map>
           </map>
+          <key>manifest</key>
+          <array>
+            <string>lib/debug/libexpatMT.lib</string>
+            <string>lib/release/libexpatMT.lib</string>
+          </array>
           <key>name</key>
           <string>windows</string>
         </map>
