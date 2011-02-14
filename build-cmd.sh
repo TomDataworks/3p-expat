@@ -46,22 +46,19 @@ pushd "$top/$EXPAT_SOURCE_DIR"
 			cp lib/expat_external.h "$INCLUDE_DIR"
         ;;
         'darwin')
-            PREFIX="$STAGING_DIR/"
-            CC="gcc-4.0" CFLAGS="-isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4" \
+            PREFIX="$STAGING_DIR"
+            CC="gcc-4.2" CFLAGS="-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5" \
                 ./configure --prefix=$PREFIX
             make
             make install
             
-            pushd "$PREFIX/lib"
+            mv "$PREFIX/lib" "$PREFIX/lib-tmp"
+            mkdir -p "$PREFIX/lib/release"
+            cp -R "$PREFIX/lib-tmp/" "$PREFIX/lib/release"
+            rm -rf "$PREFIX/lib-tmp"
+            pushd "$PREFIX/lib/release"
             fix_dylib_id "libexpat.dylib"
             popd
-            
-            pushd "$PREFIX/include"
-            patch -p0 < "$top/expat_external.patch"
-            popd
-                        
-            mv "$PREFIX/lib" "$PREFIX/lib_release"
-            
         ;;
         'linux')
         ;;
