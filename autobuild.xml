@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<llsd>
+<map>
+    <key>package_description</key>
+    <map>
+      <key>description</key>
+      <string>Expat is an XML parser library written in C</string>
+      <key>license</key>
+      <string>expat</string>
+      <key>license_file</key>
+      <string>LICENSES/expat.txt</string>
+      <key>name</key>
+      <string>expat</string>
+      <key>version</key>
+      <string>2.0.1</string>
+    </map>
+    <key>type</key>
+    <string>autobuild</string>
+    <key>version</key>
+    <string>1.2</string>
+  </map>
+</llsd>
