@@ -11,6 +11,49 @@
       <string>LICENSES/expat.txt</string>
       <key>name</key>
       <string>expat</string>
+      <key>platforms</key>
+      <map>
+        <key>common</key>
+        <map>
+          <key>build_directory</key>
+          <string>stage</string>
+          <key>configurations</key>
+          <map>
+            <key>Release</key>
+            <map>
+              <key>build</key>
+              <map>
+                <key>arguments</key>
+                <array>
+                  <string>../build-cmd.sh</string>
+                </array>
+                <key>command</key>
+                <string>sh</string>
+              </map>
+              <key>name</key>
+              <string>Release</string>
+            </map>
+          </map>
+          <key>name</key>
+          <string>common</string>
+        </map>
+        <key>windows</key>
+        <map>
+          <key>configurations</key>
+          <map>
+            <key>default</key>
+            <map>
+              <key>build</key>
+              <map>
+              </map>
+              <key>name</key>
+              <string>default</string>
+            </map>
+          </map>
+          <key>name</key>
+          <string>windows</string>
+        </map>
+      </map>
       <key>version</key>
       <string>2.0.1</string>
     </map>
