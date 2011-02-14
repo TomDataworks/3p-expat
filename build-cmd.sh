@@ -52,10 +52,9 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             make
             make install
             
-            mv "$PREFIX/lib" "$PREFIX/lib-tmp"
-            mkdir -p "$PREFIX/lib/release"
-            cp -R "$PREFIX/lib-tmp/" "$PREFIX/lib/release"
-            rm -rf "$PREFIX/lib-tmp"
+            mv "$PREFIX/lib" "$PREFIX/release"
+            mkdir -p "$PREFIX/lib"
+            mv "$PREFIX/release" "$PREFIX/lib"
             pushd "$PREFIX/lib/release"
             fix_dylib_id "libexpat.dylib"
             popd
