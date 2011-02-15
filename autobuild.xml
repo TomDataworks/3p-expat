@@ -36,7 +36,7 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>include/*.h</string>
+            <string>include/expat/*.h</string>
           </array>
           <key>name</key>
           <string>common</string>
