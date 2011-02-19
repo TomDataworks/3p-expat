@@ -47,7 +47,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
         ;;
         'darwin')
             PREFIX="$STAGING_DIR"
-            CC="gcc-4.2" CFLAGS="-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5" \
+            CC="gcc-4.2" CFLAGS="-arch i386 -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5" \
                 ./configure --prefix=$PREFIX
             make
             make install
@@ -65,7 +65,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
         ;;
         'linux')
             PREFIX="$STAGING_DIR"
-            CC="gcc-4.1" ./configure --prefix=$PREFIX
+            CFLAGS="-m32" CC="gcc-4.1" ./configure --prefix="$PREFIX"
             make
             make install
             
