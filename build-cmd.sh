@@ -27,23 +27,23 @@ STAGING_DIR="$(pwd)"
 pushd "$top/$EXPAT_SOURCE_DIR"
     case "$AUTOBUILD_PLATFORM" in
         "windows")
-        	set +x
-			load_vsvars
-			set -x
+            set +x
+            load_vsvars
+            set -x
 
-			build_sln "expat.sln" "Debug|Win32" "expat_static" || exit 1
+            build_sln "expat.sln" "Debug|Win32" "expat_static" || exit 1
             build_sln "expat.sln" "Release|Win32"  "expat_static" || exit 1
 
-			BASE_DIR="$STAGING_DIR/"
+            BASE_DIR="$STAGING_DIR/"
             mkdir -p "$BASE_DIR/lib/debug"
             mkdir -p "$BASE_DIR/lib/release"
             cp win32/bin/Release/libexpatMT.lib "$BASE_DIR/lib/release/"
             cp win32/bin/Debug/libexpatMT.lib "$BASE_DIR/lib/debug/"
-			
-			INCLUDE_DIR="$STAGING_DIR/include/expat"
-			mkdir -p "$INCLUDE_DIR"
-			cp lib/expat.h "$INCLUDE_DIR"
-			cp lib/expat_external.h "$INCLUDE_DIR"
+            
+            INCLUDE_DIR="$STAGING_DIR/include/expat"
+            mkdir -p "$INCLUDE_DIR"
+            cp lib/expat.h "$INCLUDE_DIR"
+            cp lib/expat_external.h "$INCLUDE_DIR"
         ;;
         'darwin')
             PREFIX="$STAGING_DIR"
