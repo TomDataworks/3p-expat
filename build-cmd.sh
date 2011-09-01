@@ -46,9 +46,13 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             cp lib/expat_external.h "$INCLUDE_DIR"
         ;;
         'darwin')
-            PREFIX="$STAGING_DIR"
-            CC="gcc-4.2" CFLAGS="-arch i386 -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5" \
-                ./configure --prefix=$PREFIX
+            opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5'
+            export CFLAGS="$opts"
+            export CXXFLAGS="$opts"
+            export LDFLAGS="$opts"
+            export CC="gcc-4.2"
+            export PREFIX="$STAGING_DIR"
+            ./configure --prefix=$PREFIX
             make
             make install
             
