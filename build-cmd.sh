@@ -69,17 +69,19 @@ pushd "$top/$EXPAT_SOURCE_DIR"
         ;;
         'linux')
             PREFIX="$STAGING_DIR"
-            CFLAGS="-m32" CC="gcc-4.1" ./configure --prefix="$PREFIX"
+            CFLAGS="-m32" CC="gcc-4.1" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
             make
             make install
-            
-            mv "$PREFIX/lib" "$PREFIX/release"
-            mkdir -p "$PREFIX/lib/"
-            mv "$PREFIX/release" "$PREFIX/lib/"
             
             mv "$PREFIX/include" "$PREFIX/expat"
             mkdir -p "$PREFIX/include"
             mv "$PREFIX/expat" "$PREFIX/include"
+
+			make distclean
+
+			CFLAGS="-m32 -O0 -gstabs+" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/debug"
+			make
+			make install
         ;;
     esac
 
