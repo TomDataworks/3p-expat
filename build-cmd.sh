@@ -47,6 +47,27 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             cp lib/expat.h "$INCLUDE_DIR"
             cp lib/expat_external.h "$INCLUDE_DIR"
         ;;
+        "windows64")
+            set +x
+            load_vsvars
+            set -x
+
+            cmake -G"Visual Studio 11 Win64" . -DBUILD_shared:BOOL=OFF
+
+            build_sln "expat.sln" "Debug|x64" "expat" || exit 1
+            build_sln "expat.sln" "Release|x64"  "expat" || exit 1
+
+            BASE_DIR="$STAGING_DIR/"
+            mkdir -p "$BASE_DIR/lib/debug"
+            mkdir -p "$BASE_DIR/lib/release"
+            cp Release/expat.lib "$BASE_DIR/lib/release/"
+            cp Debug/expat.lib "$BASE_DIR/lib/debug/"
+            
+            INCLUDE_DIR="$STAGING_DIR/include/expat"
+            mkdir -p "$INCLUDE_DIR"
+            cp lib/expat.h "$INCLUDE_DIR"
+            cp lib/expat_external.h "$INCLUDE_DIR"
+        ;;
         'darwin')
             opts='-arch i386 -iwithsysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5'
             export CFLAGS="$opts"

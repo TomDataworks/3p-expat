@@ -114,6 +114,29 @@
           <key>name</key>
           <string>windows</string>
         </map>
+        <key>windows64</key>
+        <map>
+          <key>configurations</key>
+          <map>
+            <key>Release</key>
+            <map>
+              <key>build</key>
+              <map>
+              </map>
+              <key>default</key>
+              <string>true</string>
+              <key>name</key>
+              <string>Release</string>
+            </map>
+          </map>
+          <key>manifest</key>
+          <array>
+            <string>lib/debug/expat.lib</string>
+            <string>lib/release/expat.lib</string>
+          </array>
+          <key>name</key>
+          <string>windows64</string>
+        </map>
       </map>
       <key>version</key>
       <string>2.1.0</string>
