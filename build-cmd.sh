@@ -18,7 +18,7 @@ set +x
 eval "$("$AUTOBUILD" source_environment)"
 set -x
 
-EXPAT_VERSION=2.0.1
+EXPAT_VERSION=2.1.0
 EXPAT_SOURCE_DIR=expat-$EXPAT_VERSION
 
 top="$(dirname "$0")"
@@ -31,14 +31,16 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             load_vsvars
             set -x
 
-            build_sln "expat.sln" "Debug|Win32" "expat_static" || exit 1
-            build_sln "expat.sln" "Release|Win32"  "expat_static" || exit 1
+            cmake -G"Visual Studio 11" . -DBUILD_shared:BOOL=OFF
+
+            build_sln "expat.sln" "Debug|Win32" "expat" || exit 1
+            build_sln "expat.sln" "Release|Win32"  "expat" || exit 1
 
             BASE_DIR="$STAGING_DIR/"
             mkdir -p "$BASE_DIR/lib/debug"
             mkdir -p "$BASE_DIR/lib/release"
-            cp win32/bin/Release/libexpatMT.lib "$BASE_DIR/lib/release/"
-            cp win32/bin/Debug/libexpatMT.lib "$BASE_DIR/lib/debug/"
+            cp Release/expat.lib "$BASE_DIR/lib/release/"
+            cp Debug/expat.lib "$BASE_DIR/lib/debug/"
             
             INCLUDE_DIR="$STAGING_DIR/include/expat"
             mkdir -p "$INCLUDE_DIR"
