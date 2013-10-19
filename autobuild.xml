@@ -108,8 +108,8 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>lib/debug/libexpatMT.lib</string>
-            <string>lib/release/libexpatMT.lib</string>
+            <string>lib/debug/expat.lib</string>
+            <string>lib/release/expat.lib</string>
           </array>
           <key>name</key>
           <string>windows</string>
