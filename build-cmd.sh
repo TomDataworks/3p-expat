@@ -31,7 +31,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             load_vsvars
             set -x
 
-            cmake -G"Visual Studio 11" . -DBUILD_shared:BOOL=OFF
+            cmake -G"Visual Studio 12" . -DBUILD_shared:BOOL=OFF
 
             build_sln "expat.sln" "Debug|Win32" "expat" || exit 1
             build_sln "expat.sln" "Release|Win32"  "expat" || exit 1
@@ -52,7 +52,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             load_vsvars
             set -x
 
-            cmake -G"Visual Studio 11 Win64" . -DBUILD_shared:BOOL=OFF
+            cmake -G"Visual Studio 12 Win64" . -DBUILD_shared:BOOL=OFF
 
             build_sln "expat.sln" "Debug|x64" "expat" || exit 1
             build_sln "expat.sln" "Release|x64"  "expat" || exit 1
