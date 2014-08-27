@@ -109,8 +109,9 @@ pushd "$top/$EXPAT_SOURCE_DIR"
         ;;
         'linux64')
             PREFIX="$STAGING_DIR"
-            CFLAGS="-m64" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
+            CFLAGS="-m64 -O3" ./configure --with-pic --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
             make
+            make check
             make install
             
             mv "$PREFIX/include" "$PREFIX/expat"
@@ -119,8 +120,9 @@ pushd "$top/$EXPAT_SOURCE_DIR"
 
             make distclean
 
-            CFLAGS="-m64 -O0 -gstabs+" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/debug"
+            CFLAGS="-m64 -O0 -gstabs+" ./configure --with-pic --prefix="$PREFIX" --libdir="$PREFIX/lib/debug"
             make
+            make check
             make install
         ;;
     esac
