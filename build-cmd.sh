@@ -93,34 +93,26 @@ pushd "$top/$EXPAT_SOURCE_DIR"
         ;;
         'linux')
             PREFIX="$STAGING_DIR"
-            CFLAGS="-m32" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
+            CFLAGS="-m32 -O3" ./configure --prefix="$PREFIX" --includedir="$PREFIX/include/expat" --libdir="$PREFIX/lib/release"
             make
             make install
-            
-            mv "$PREFIX/include" "$PREFIX/expat"
-            mkdir -p "$PREFIX/include"
-            mv "$PREFIX/expat" "$PREFIX/include"
 
             make distclean
 
-            CFLAGS="-m32 -O0 -gstabs+" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/debug"
+            CFLAGS="-m32 -Og -g" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/debug"
             make
             make install
         ;;
         'linux64')
             PREFIX="$STAGING_DIR"
-            CFLAGS="-m64 -O3" ./configure --with-pic --prefix="$PREFIX" --libdir="$PREFIX/lib/release"
+            CFLAGS="-m64 -O3" ./configure --with-pic --prefix="$PREFIX" --includedir="$PREFIX/include/expat" --libdir="$PREFIX/lib/release"
             make
             make check
             make install
-            
-            mv "$PREFIX/include" "$PREFIX/expat"
-            mkdir -p "$PREFIX/include"
-            mv "$PREFIX/expat" "$PREFIX/include"
 
             make distclean
 
-            CFLAGS="-m64 -O0 -gstabs+" ./configure --with-pic --prefix="$PREFIX" --libdir="$PREFIX/lib/debug"
+            CFLAGS="-m64 -Og -g" ./configure --with-pic --prefix="$PREFIX" --libdir="$PREFIX/lib/debug"
             make
             make check
             make install
