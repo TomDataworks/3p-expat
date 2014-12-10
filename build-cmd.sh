@@ -22,7 +22,7 @@ EXPAT_VERSION=2.1.0
 EXPAT_SOURCE_DIR=expat-$EXPAT_VERSION
 
 top="$(dirname "$0")"
-STAGING_DIR="$(pwd)"
+stage="$(pwd)"
 
 pushd "$top/$EXPAT_SOURCE_DIR"
     case "$AUTOBUILD_PLATFORM" in
@@ -36,13 +36,12 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             build_sln "expat.sln" "Debug|Win32" "expat" || exit 1
             build_sln "expat.sln" "Release|Win32"  "expat" || exit 1
 
-            BASE_DIR="$STAGING_DIR/"
-            mkdir -p "$BASE_DIR/lib/debug"
-            mkdir -p "$BASE_DIR/lib/release"
-            cp Release/expat.lib "$BASE_DIR/lib/release/"
-            cp Debug/expat.lib "$BASE_DIR/lib/debug/"
+            mkdir -p "$stage/lib/debug"
+            mkdir -p "$stage/lib/release"
+            cp Release/expat.lib "$stage/lib/release/"
+            cp Debug/expat.lib "$stage/lib/debug/"
             
-            INCLUDE_DIR="$STAGING_DIR/include/expat"
+            INCLUDE_DIR="$stage/include/expat"
             mkdir -p "$INCLUDE_DIR"
             cp lib/expat.h "$INCLUDE_DIR"
             cp lib/expat_external.h "$INCLUDE_DIR"
@@ -57,13 +56,12 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             build_sln "expat.sln" "Debug|x64" "expat" || exit 1
             build_sln "expat.sln" "Release|x64"  "expat" || exit 1
 
-            BASE_DIR="$STAGING_DIR/"
-            mkdir -p "$BASE_DIR/lib/debug"
-            mkdir -p "$BASE_DIR/lib/release"
-            cp Release/expat.lib "$BASE_DIR/lib/release/"
-            cp Debug/expat.lib "$BASE_DIR/lib/debug/"
+            mkdir -p "$stage/lib/debug"
+            mkdir -p "$stage/lib/release"
+            cp Release/expat.lib "$stage/lib/release/"
+            cp Debug/expat.lib "$stage/lib/debug/"
             
-            INCLUDE_DIR="$STAGING_DIR/include/expat"
+            INCLUDE_DIR="$stage/include/expat"
             mkdir -p "$INCLUDE_DIR"
             cp lib/expat.h "$INCLUDE_DIR"
             cp lib/expat_external.h "$INCLUDE_DIR"
@@ -75,7 +73,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             export CXXFLAGS="$opts"
             export LDFLAGS="$opts"
             export CC="llvm-gcc"
-            export PREFIX="$STAGING_DIR"
+            export PREFIX="$stage"
             ./configure --prefix=$PREFIX
             make
             make install
@@ -92,7 +90,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             mv "$PREFIX/expat" "$PREFIX/include"
         ;;
         'linux')
-            PREFIX="$STAGING_DIR"
+            PREFIX="$stage"
             CFLAGS="-m32 -O3" ./configure --prefix="$PREFIX" --includedir="$PREFIX/include/expat" --libdir="$PREFIX/lib/release"
             make
             make install
@@ -104,23 +102,33 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             make install
         ;;
         'linux64')
-            PREFIX="$STAGING_DIR"
-            CFLAGS="-m64 -O3" ./configure --with-pic --prefix="$PREFIX" --includedir="$PREFIX/include/expat" --libdir="$PREFIX/lib/release"
+            CFLAGS="-m64 -Og -g -fPIC -DPIC" ./configure --with-pic --prefix="\${AUTOBUILD_PACKAGES_DIR}" --libdir="\${prefix}/lib/debug" --includedir="\${prefix}/include/expat"
             make
-            make check
-            make install
+            make install DESTDIR="$stage"
+
+            # conditionally run unit tests
+            if [ "${DISABLE_UNIT_TESTS:-0}" = "0" ]; then
+                make check
+            fi
 
             make distclean
 
-            CFLAGS="-m64 -Og -g" ./configure --with-pic --prefix="$PREFIX" --libdir="$PREFIX/lib/debug"
+            CFLAGS="-m64 -O3 -fPIC -DPIC" ./configure --with-pic --prefix="\${AUTOBUILD_PACKAGES_DIR}" --libdir="\${prefix}/lib/release" --includedir="\${prefix}/include/expat" 
             make
-            make check
-            make install
+            make install DESTDIR="$stage"
+
+            # conditionally run unit tests
+            if [ "${DISABLE_UNIT_TESTS:-0}" = "0" ]; then
+                make check
+            fi
+
+            make distclean
+
         ;;
     esac
 
-    mkdir -p "$STAGING_DIR/LICENSES"
-    cp "COPYING" "$STAGING_DIR/LICENSES/expat.txt"
+    mkdir -p "$stage/LICENSES"
+    cp "COPYING" "$stage/LICENSES/expat.txt"
 popd
 
 pass
