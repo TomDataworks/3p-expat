@@ -24,6 +24,8 @@ EXPAT_SOURCE_DIR=expat-$EXPAT_VERSION
 top="$(dirname "$0")"
 stage="$(pwd)"
 
+echo "${EXPAT_VERSION}" > "${stage}/VERSION.txt"
+
 pushd "$top/$EXPAT_SOURCE_DIR"
     case "$AUTOBUILD_PLATFORM" in
         "windows")
