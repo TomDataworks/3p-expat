@@ -92,40 +92,128 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             mv "$PREFIX/expat" "$PREFIX/include"
         ;;
         'linux')
-            PREFIX="$stage"
-            CFLAGS="-m32 -O3" ./configure --prefix="$PREFIX" --includedir="$PREFIX/include/expat" --libdir="$PREFIX/lib/release"
-            make
-            make install
+            # Linux build environment at Linden comes pre-polluted with stuff that can
+            # seriously damage 3rd-party builds.  Environmental garbage you can expect
+            # includes:
+            #
+            #    DISTCC_POTENTIAL_HOSTS     arch           root        CXXFLAGS
+            #    DISTCC_LOCATION            top            branch      CC
+            #    DISTCC_HOSTS               build_name     suffix      CXX
+            #    LSDISTCC_ARGS              repo           prefix      CFLAGS
+            #    cxx_version                AUTOBUILD      SIGN        CPPFLAGS
+            #
+            # So, clear out bits that shouldn't affect our configure-directed build
+            # but which do nonetheless.
+            #
+            # unset DISTCC_HOSTS CC CXX CFLAGS CPPFLAGS CXXFLAGS
+
+            # Prefer gcc-4.8 if available.
+            if [[ -x /usr/bin/gcc-4.8 && -x /usr/bin/g++-4.8 ]]; then
+                export CC=/usr/bin/gcc-4.8
+                export CXX=/usr/bin/g++-4.8
+            fi
+
+            # Default target to 32-bit
+            opts="${TARGET_OPTS:--m32}"
+            JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
+            HARDENED="-fstack-protector-strong -D_FORTIFY_SOURCE=2"
+
+            # Handle any deliberate platform targeting
+            if [ -z "$TARGET_CPPFLAGS" ]; then
+                # Remove sysroot contamination from build environment
+                unset CPPFLAGS
+            else
+                # Incorporate special pre-processing flags
+                export CPPFLAGS="$TARGET_CPPFLAGS"
+            fi
+
+            CFLAGS="$opts -Og -g -fPIC -DPIC" \
+            CXXFLAGS="$opts -Og -g -fPIC -DPIC" \
+            ./configure --with-pic --prefix="\${AUTOBUILD_PACKAGES_DIR}" --libdir="\${prefix}/lib/debug" --includedir="\${prefix}/include/expat"
+            make -j$JOBS
+            make install DESTDIR="$stage"
+
+            # conditionally run unit tests
+            if [ "${DISABLE_UNIT_TESTS:-0}" = "0" ]; then
+                make check -j$JOBS
+            fi
 
             make distclean
 
-            CFLAGS="-m32 -Og -g" ./configure --prefix="$PREFIX" --libdir="$PREFIX/lib/debug"
-            make
-            make install
+            CFLAGS="$opts -O3 -g $HARDENED -fPIC -DPIC" \
+            CXXFLAGS="$opts -O3 -g $HARDENED -fPIC -DPIC" \
+            ./configure --with-pic --prefix="\${AUTOBUILD_PACKAGES_DIR}" --libdir="\${prefix}/lib/release" --includedir="\${prefix}/include/expat" 
+            make -j$JOBS
+            make install DESTDIR="$stage"
+
+            # conditionally run unit tests
+            if [ "${DISABLE_UNIT_TESTS:-0}" = "0" ]; then
+                make check -j$JOBS
+            fi
+
+            make distclean
         ;;
         'linux64')
-            CFLAGS="-m64 -Og -g -fPIC -DPIC" ./configure --with-pic --prefix="\${AUTOBUILD_PACKAGES_DIR}" --libdir="\${prefix}/lib/debug" --includedir="\${prefix}/include/expat"
-            make
+            # Linux build environment at Linden comes pre-polluted with stuff that can
+            # seriously damage 3rd-party builds.  Environmental garbage you can expect
+            # includes:
+            #
+            #    DISTCC_POTENTIAL_HOSTS     arch           root        CXXFLAGS
+            #    DISTCC_LOCATION            top            branch      CC
+            #    DISTCC_HOSTS               build_name     suffix      CXX
+            #    LSDISTCC_ARGS              repo           prefix      CFLAGS
+            #    cxx_version                AUTOBUILD      SIGN        CPPFLAGS
+            #
+            # So, clear out bits that shouldn't affect our configure-directed build
+            # but which do nonetheless.
+            #
+            # unset DISTCC_HOSTS CC CXX CFLAGS CPPFLAGS CXXFLAGS
+
+            # Prefer gcc-4.8 if available.
+            if [[ -x /usr/bin/gcc-4.8 && -x /usr/bin/g++-4.8 ]]; then
+                export CC=/usr/bin/gcc-4.8
+                export CXX=/usr/bin/g++-4.8
+            fi
+
+            # Default target to 64-bit
+            opts="${TARGET_OPTS:--m64}"
+            JOBS=`cat /proc/cpuinfo | grep processor | wc -l`
+            HARDENED="-fstack-protector-strong -D_FORTIFY_SOURCE=2"
+
+            # Handle any deliberate platform targeting
+            if [ -z "$TARGET_CPPFLAGS" ]; then
+                # Remove sysroot contamination from build environment
+                unset CPPFLAGS
+            else
+                # Incorporate special pre-processing flags
+                export CPPFLAGS="$TARGET_CPPFLAGS"
+            fi
+
+            CFLAGS="$opts -Og -g -fPIC -DPIC" \
+            CXXFLAGS="$opts -Og -g -fPIC -DPIC" \
+            ./configure --with-pic --prefix="\${AUTOBUILD_PACKAGES_DIR}" --libdir="\${prefix}/lib/debug" --includedir="\${prefix}/include/expat"
+            make -j$JOBS
             make install DESTDIR="$stage"
 
             # conditionally run unit tests
             if [ "${DISABLE_UNIT_TESTS:-0}" = "0" ]; then
-                make check
+                make check -j$JOBS
             fi
 
             make distclean
 
-            CFLAGS="-m64 -O3 -fPIC -DPIC" ./configure --with-pic --prefix="\${AUTOBUILD_PACKAGES_DIR}" --libdir="\${prefix}/lib/release" --includedir="\${prefix}/include/expat" 
-            make
+            CFLAGS="$opts -O3 -g $HARDENED -fPIC -DPIC" \
+            CXXFLAGS="$opts -O3 -g $HARDENED -fPIC -DPIC" \
+            ./configure --with-pic --prefix="\${AUTOBUILD_PACKAGES_DIR}" --libdir="\${prefix}/lib/release" --includedir="\${prefix}/include/expat" 
+            make -j$JOBS
             make install DESTDIR="$stage"
 
             # conditionally run unit tests
             if [ "${DISABLE_UNIT_TESTS:-0}" = "0" ]; then
-                make check
+                make check -j$JOBS
             fi
 
             make distclean
-
         ;;
     esac
 
