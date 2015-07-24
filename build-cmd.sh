@@ -35,8 +35,8 @@ pushd "$top/$EXPAT_SOURCE_DIR"
 
             cmake -G"Visual Studio 14" . -DBUILD_shared:BOOL=OFF
 
-            build_sln "expat.sln" "Debug|Win32" "expat"
-            build_sln "expat.sln" "Release|Win32"  "expat"
+            build_sln "expat.sln" "Debug" "Win32" "expat"
+            build_sln "expat.sln" "Release" "Win32"  "expat"
 
             mkdir -p "$stage/lib/debug"
             mkdir -p "$stage/lib/release"
@@ -55,8 +55,8 @@ pushd "$top/$EXPAT_SOURCE_DIR"
 
             cmake -G"Visual Studio 14 Win64" . -DBUILD_shared:BOOL=OFF
 
-            build_sln "expat.sln" "Debug|x64" "expat"
-            build_sln "expat.sln" "Release|x64"  "expat"
+            build_sln "expat.sln" "Debug" "x64" "expat"
+            build_sln "expat.sln" "Release" "x64"  "expat"
 
             mkdir -p "$stage/lib/debug"
             mkdir -p "$stage/lib/release"
