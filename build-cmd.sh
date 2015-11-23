@@ -70,7 +70,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
         ;;
         'darwin')
             DEVELOPER=$(xcode-select --print-path)
-            opts="-arch i386 -arch x86_64 -iwithsysroot ${DEVELOPER}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk -mmacosx-version-min=10.8"
+            opts="-arch i386 -arch x86_64 -iwithsysroot ${DEVELOPER}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk -mmacosx-version-min=10.8"
             export CFLAGS="$opts"
             export CXXFLAGS="$opts"
             export LDFLAGS="$opts"
