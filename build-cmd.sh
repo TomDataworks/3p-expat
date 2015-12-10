@@ -33,7 +33,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             load_vsvars
             set -x
 
-            cmake -G"Visual Studio 14" . -DBUILD_shared:BOOL=OFF
+            cmake -G"Visual Studio 14" . -DCMAKE_SYSTEM_VERSION="10.0.10586.0" -DBUILD_shared:BOOL=OFF
 
             build_sln "expat.sln" "Debug" "Win32" "expat"
             build_sln "expat.sln" "Release" "Win32"  "expat"
@@ -53,7 +53,7 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             load_vsvars
             set -x
 
-            cmake -G"Visual Studio 14 Win64" . -DBUILD_shared:BOOL=OFF
+            cmake -G"Visual Studio 14 Win64" . -DCMAKE_SYSTEM_VERSION="10.0.10586.0" -DBUILD_shared:BOOL=OFF
 
             build_sln "expat.sln" "Debug" "x64" "expat"
             build_sln "expat.sln" "Release" "x64"  "expat"
