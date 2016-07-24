@@ -18,7 +18,7 @@ set +x
 eval "$("$AUTOBUILD" source_environment)"
 set -x
 
-EXPAT_VERSION=2.1.1
+EXPAT_VERSION=2.2.0
 EXPAT_SOURCE_DIR=expat
 
 top="$(dirname "$0")"
