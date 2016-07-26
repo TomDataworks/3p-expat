@@ -4,7 +4,7 @@
     <key>package_description</key>
     <map>
       <key>copyright</key>
-      <string>Copyright (c) 1998, 1999, 2000 Thai Open Source Software Center Ltd and Clark Cooper - Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006 Expat maintainers.</string>
+      <string>Copyright (c) 1998-2000 Thai Open Source Software Center Ltd and Clark Cooper - Copyright (c) 2001-2016 Expat maintainers</string>
       <key>description</key>
       <string>Expat is an XML parser library written in C</string>
       <key>license</key>
@@ -141,7 +141,7 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>lib/debug/expat.lib</string>
+            <string>lib/debug/expatd.lib</string>
             <string>lib/release/expat.lib</string>
           </array>
           <key>name</key>
@@ -164,7 +164,7 @@
           </map>
           <key>manifest</key>
           <array>
-            <string>lib/debug/expat.lib</string>
+            <string>lib/debug/expatd.lib</string>
             <string>lib/release/expat.lib</string>
           </array>
           <key>name</key>
