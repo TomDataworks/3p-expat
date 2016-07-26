@@ -33,15 +33,21 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             load_vsvars
             set -x
 
-            cmake -G"Visual Studio 14" . -DCMAKE_SYSTEM_VERSION="10.0.10586.0" -DBUILD_shared:BOOL=OFF
+            cmake -G"Visual Studio 14" . -DCMAKE_SYSTEM_VERSION="10.0.10586.0" -DBUILD_shared:BOOL=OFF -DBUILD_tools:BOOL=OFF -DBUILD_examples:BOOL=OFF
 
-            build_sln "expat.sln" "Debug" "Win32" "expat"
-            build_sln "expat.sln" "Release" "Win32"  "expat"
+            build_sln "expat.sln" "Debug" "Win32" "ALL_BUILD"
+            build_sln "expat.sln" "Release" "Win32"  "ALL_BUILD"
+
+            # conditionally run unit tests
+            if [ "${DISABLE_UNIT_TESTS:-0}" = "0" ]; then
+                cmake --build . --target RUN_TESTS --config debug
+                cmake --build . --target RUN_TESTS --config release
+            fi
 
             mkdir -p "$stage/lib/debug"
             mkdir -p "$stage/lib/release"
             cp Release/expat.lib "$stage/lib/release/"
-            cp Debug/expat.lib "$stage/lib/debug/"
+            cp Debug/expatd.lib "$stage/lib/debug/"
             
             INCLUDE_DIR="$stage/include/expat"
             mkdir -p "$INCLUDE_DIR"
@@ -53,15 +59,21 @@ pushd "$top/$EXPAT_SOURCE_DIR"
             load_vsvars
             set -x
 
-            cmake -G"Visual Studio 14 Win64" . -DCMAKE_SYSTEM_VERSION="10.0.10586.0" -DBUILD_shared:BOOL=OFF
+            cmake -G"Visual Studio 14 Win64" . -DCMAKE_SYSTEM_VERSION="10.0.10586.0" -DBUILD_shared:BOOL=OFF -DBUILD_tools:BOOL=OFF -DBUILD_examples:BOOL=OFF
 
-            build_sln "expat.sln" "Debug" "x64" "expat"
-            build_sln "expat.sln" "Release" "x64"  "expat"
+            build_sln "expat.sln" "Debug" "x64" "ALL_BUILD"
+            build_sln "expat.sln" "Release" "x64"  "ALL_BUILD"
+
+            # conditionally run unit tests
+            if [ "${DISABLE_UNIT_TESTS:-0}" = "0" ]; then
+                cmake --build . --target RUN_TESTS --config debug
+                cmake --build . --target RUN_TESTS --config release
+            fi
 
             mkdir -p "$stage/lib/debug"
             mkdir -p "$stage/lib/release"
             cp Release/expat.lib "$stage/lib/release/"
-            cp Debug/expat.lib "$stage/lib/debug/"
+            cp Debug/expatd.lib "$stage/lib/debug/"
             
             INCLUDE_DIR="$stage/include/expat"
             mkdir -p "$INCLUDE_DIR"
